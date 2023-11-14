@@ -1,0 +1,23 @@
+Contains Duplicate 
+
+My Solution 
+class Solution:
+   def containsDuplicate(self, nums: List[int]) -> bool:
+       set_list = set()
+       for item in nums:
+           if item in set_list:
+               return True
+           else:
+               set_list.add(item)
+       return False
+
+Efficient Solution 
+class Solution:
+   def containsDuplicate(self, nums: List[int]) -> bool:
+       set_list = set()
+       for item in nums:
+           if item in set_list:
+               return True
+           else:
+               set_list.add(item)
+       return False
