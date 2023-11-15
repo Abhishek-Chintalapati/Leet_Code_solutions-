@@ -1,0 +1,22 @@
+My Solution  
+
+from typing import List
+
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        num_indices = {}
+        for i, num in enumerate(nums):
+            if num in num_indices:
+                num_indices[num].append(i)
+            else:
+                num_indices[num] = [i]
+        
+        sorted_list = sorted(nums)
+        
+        for i in range(len(sorted_list)-1):
+            for j in range(i+1, len(sorted_list)):
+                if sorted_list[i] + sorted_list[j] == target:
+                    if sorted_list[i] == sorted_list[j]:
+                        return num_indices[sorted_list[i]]
+                    else:
+                        return [num_indices[sorted_list[i]][0], num_indices[sorted_list[j]][0]]
