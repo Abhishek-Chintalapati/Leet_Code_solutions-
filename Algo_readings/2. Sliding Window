@@ -1,0 +1,37 @@
+https://neetcode.io/courses/advanced-algorithms/0 
+
+Sliding Window
+Sometimes, a problem may ask to return the actual subarray containing the largest sum, instead of just the sum itself? We did not necessarily have two explicit pointers that kept track of the subarray in the previous implementation but we can actually do this by keeping track of a "window". A window in this case denotes a contiguous subarray that does not break our constraint of the sum staying positive.
+
+To do this, we can have a left pointer, L = 0, and a right pointer, R. We will add elements from the right and remove from the left. Since we want the subarray with the maximum sum, we can also have two other pointers, maxL and maxR, which keep track of the subarray that contains the maximum sum so far. This way, we don't lose them when we move L and R. Similar to before, if our current sum becomes negative, we can move our left pointer all the way to our right pointer. This means that our constraint was broken and we remove all elements from the left and start a new window.
+
+def slidingWindow(nums):
+    maxSum = nums[0]
+    curSum = 0
+    maxL, maxR = 0, 0
+    L = 0
+
+    for R in range(len(nums)):
+        if curSum < 0:
+            curSum = 0
+            L = R
+
+        curSum += nums[R]
+        if curSum > maxSum:
+            maxSum = curSum
+            maxL, maxR = L, R 
+
+    return [maxL, maxR]
+image
+
+Subarray refers to a part of an array that is contiguous.
+Time Complexity
+Because we only make one pass, our time complexity comes down to 
+�
+(
+�
+)
+O(n). This will be discussed more in the next chapter.
+
+Closing Notes
+Next, let's formally look at the sliding window technique. There are two variations, fixed sliding window and variable sized sliding window, both of which are useful for different kinds of problems.
