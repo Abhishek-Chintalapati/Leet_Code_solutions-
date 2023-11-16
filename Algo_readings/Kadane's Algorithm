@@ -1,0 +1,52 @@
+https://neetcode.io/courses/advanced-algorithms/0 
+
+Kadane's Algorithm
+Kadane's algorithm is a greedy/dynamic programming algorithm that can be used on array problems to bring the time complexity down to 
+�
+(
+�
+)
+O(n). It is used to calculate the maximum sum subarray ending at a particular position.
+
+Motivation
+Suppose we are given the following question:
+
+Q: Find a non-empty subarray with the largest sum.
+This question is asking us to find a group of contiguous values in an array that give the largest sum. We are then asked to return that sum.
+
+If we forget about Kadane's algorithm for a second, the brute force way to approach this would be to go through every single subarray and calculate the sum, while keeping track of a maximum sum. This will work but there is a lot of repeated work. For every iteration of our outer for loop, our inner loop does linear work. This makes the complexity 
+�
+(
+�
+2
+)
+O(n 
+2
+ ).
+
+def bruteForce(nums):
+    maxSum = nums[0]
+
+    for i in range(len(nums)):
+        curSum = 0
+        for j in range(i, len(nums)):
+            curSum += nums[j]
+            maxSum = max(maxSum, curSum)
+    return maxSum
+We can do better.
+
+Kadane's algorithm tells us that there is a way to calculate the largest sum by only making one pass on the array, bringing the complexity down to linear time. Let's look at how that can be done.
+
+Since we are looking for the largest sum, it is a good idea to avoid negative numbers because we know that contradicts what the question is asking for. Negative numbers will only make our sum smaller. Kadane's algorithm runs one for loop over the array and at the beginning of each iteration, if the current sum is negative, it will reset the current sum to zero. This way, we ensure a one-pass and solve the problem in linear time. This is how it would look like in code and visualized. Remember, the key here is that if we encounter a subarray with a negative sum, we discard it and we keep considering a subarray as long as it has a positive sum.
+
+image
+
+def kadanes(nums):
+    maxSum = nums[0]
+    curSum = 0
+
+    for n in nums:
+        curSum = max(curSum, 0)
+        curSum += n
+        maxSum = max(maxSum, curSum)
+    return maxSum
