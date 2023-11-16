@@ -1,0 +1,88 @@
+https://neetcode.io/courses/advanced-algorithms/1
+
+Sliding Window (Fixed)
+The idea behind having a fixed sliding window is to maintain two pointers that are k apart from each other and fit a certain constraint.
+
+We are given the following question:
+
+Q: Given an array, return true if there are two elements within a window of size 
+�
+k that are equal.
+The brute force way of approaching this problem is to run two for loops and return true if there exist close duplicates in subarray of size k.
+
+Let's say that we have the array [1,2,3,2,3,3], with k = 3. By looking at the array, we notice there are two duplicates. Using the brute-force approach, our outer loop will loop 
+�
+n times and our inner loop will repeat 
+�
+k times, where k <= n meaning that in the worst case, we end up with quadratic time complexity, 
+�
+(
+�
+2
+)
+O(n 
+2
+ ).
+
+def closeDuplicatesBruteForce(nums, k):
+    for L in range(len(nums)):
+        for R in range(L + 1, min(len(nums), L + k)):
+            if nums[L] == nums[R]:
+                return True
+    return False
+We can do better with the sliding window. The idea is the same as what we discussed in the previous chapter when we introduced the sliding window variation of Kadane's algorithm. In this case, we must maintain a window of size k and within our window, we must have two duplicates.
+
+Sets allow us to store unique elements and have an 
+�
+(
+1
+)
+O(1) lookup, removal and add complexity. We can use a set to denote our window and add elements from the right. When our set's size goes beyond k, we can remove elements from the left to maintain our window size. Since we are adding from the right, if we encounter a number that has already been added, we can return true. Our set's size will never exceed k.
+
+def closeDuplicates(nums, k):
+    window = set() # Cur window of size <= k
+    L = 0
+
+    for R in range(len(nums)):
+        if R - L + 1 > k:
+            window.remove(nums[L])
+            L += 1
+        if nums[R] in window:
+            return True
+        window.add(nums[R])
+
+    return False
+image
+
+Time Complexity
+We bring the time complexity down from 
+�
+(
+�
+2
+)
+O(n 
+2
+ ) to 
+�
+(
+�
+)
+O(n) because we only perform a single pass on the array. We will only iterate at most 
+�
+n times, using 
+�
+(
+1
+)
+O(1) space. Our hashset allows us to have 
+�
+(
+1
+)
+O(1) lookup.
+
+Closing Notes
+Sliding window is very abstract as a pattern and can be applied to many problems, some which can involve other concepts, such as hash sets, as we just saw. One key thing that tell if a problem can be solved using the fixed sliding window technique is if the problem specifies a subarray length, k.
+
+That being said, a fixed length is not the only way to implement the sliding window technique. There is also a variable variation of sliding window where we keep expanding our window until within a given constraint.
