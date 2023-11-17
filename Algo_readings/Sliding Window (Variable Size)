@@ -1,0 +1,62 @@
+Sliding Window (Variable Size)
+Sliding Window (variable) tells us that we can keep expanding our window as long as we don't break the constraint we are given. We already saw this with Kadane's algorithm when we tried to expand the window as much as possible to get to our maximum sum.
+
+Let's look at a relatively simple example and then move on to a more difficult one.
+
+Simple example
+Q: Find the length of the longest subarray, with the same value in each position.
+Let's apply the sliding window technique to the array [4, 2, 2, 3, 3, 3].
+
+Again, we can make use of two pointers, L and R. Our constraint is that we cannot have distinct values in our window. At the same time, we will have to keep track of the longest window we encountered that met our constraint, i.e. same value in each position.
+
+To do this, we can run a for loop on our array and keep expanding our window from the right, until we encounter a value we haven't encountered before. We then shrink our window by bringing our L pointer to our R pointer. We don't need to increment L because if we encountered a new value, it must be the case that every value before was a duplicate. We then repeatedly calculate the length of our window by taking the maximum of the current length and the maximum length. This is done using R - L + 1 which ensures both indices are inclusive.
+
+def longestSubarray(nums):
+    length = 0
+    L = 0
+    
+    for R in range(len(nums)):
+        if nums[L] != nums[R]:
+            L = R 
+        length = max(length, R - L + 1)
+    return length
+img
+
+Notice that the code here is very similar. We have two pointers, we expand our window from the right and we shift our left pointer when our constraint gets broken.
+
+Now, let's take a look at another question, which demonstrates the concept of the variable sliding window further.
+
+Classic example
+Q: Find the minimum length subarray, where the sum is greater than or equal to the target. Assume all values are positive.
+Here, we are asked to find the minimum length. We will expand our window from the right and if our sum becomes greater than or equal to the target, we will start removing from the left until it no longer breaks this constraint.
+
+You may be thinking, why should we remove from the left if our sum becomes greater than or equal to the target, isn't that what the question is looking for? Yes, but remember that if we have already found sum that satisfies our condition, we don't need to keep expanding our window.
+def shortestSubarray(nums, target):
+    L, total = 0, 0
+    length = float("inf")
+    
+    for R in range(len(nums)):
+        total += nums[R]
+        while total >= target:
+            length = min(R - L + 1, length)
+            total -= nums[L]
+            L += 1
+    return 0 if length == float("inf") else length
+img
+
+Time Complexity
+The beauty of this technique is that it brings the time complexity down to 
+�
+(
+�
+)
+O(n). The question then is, how is it possible to have a while loop inside of a for loop and have the time complexity be at 
+�
+(
+�
+)
+O(n)? The while loop is not iterating 
+�
+n times at every iteration, but rather 
+�
+n times in total. In fact, it is not even running in some of the iterations. For example, when the total < target in the first iteration, the while loop is never executed. This is what is referred to as amortized analysis.
