@@ -1,0 +1,66 @@
+Two Pointers
+
+https://neetcode.io/courses/advanced-algorithms/3
+
+We have already seen a version of two pointers in sliding window. Technically, sliding window is a subset of two pointers. Two pointers is an abstract, yet versatile technique used on array problems. The main idea is to have a L (left) pointer and a R pointer, both starting at some index of the array. Where they start depends on the problem at hand, but we will cover the following method.
+
+Concept
+We will start the L pointer at 
+0
+0 and R pointer at arr.length - 1 and increment either the L, or decrement R or both depending on the conditions given in the problem. This repeats until the pointers meet each other.
+
+Examples
+Q: Check if an array is palindrome.
+An palindrome is a sequence that reads the same backwards as forwards. We can employ our two pointer implementation we mentioned above. If we have a string word and start our left pointer at the index 0 and our right pointer at index word.length - 1, every character at every L must match with every character at R.
+
+def isPalindrome(word):
+    L, R = 0, len(word) - 1
+    while L < R:
+        if word[L] != word[R]:
+            return False
+        L += 1
+        R -= 1
+    return True
+The time complexity of this technique is 
+�
+(
+�
+)
+O(n) where the work done inside the while loop is 
+�
+(
+1
+)
+O(1).
+
+Let's look at another example.
+
+Q: Given a sorted input array, return the two indices of two elements which sums up to the target value. Assume there's exactly one solution.
+The trivial approach here would be to iterate over every single pair of integers. However, this gives 
+�
+(
+�
+2
+)
+O(n 
+2
+ ) and we can do better.
+
+Since this is a sorted array, we can utilize this information to move our pointers intelligently. Just like before, we can start our L and R pointers at 0 and arr.length - 1, respectively. We can calculate the sum at every single position of both of our pointers. If the sum is too large, we can decrement out R pointer and if the sum is too small, we can increment our L pointer.
+
+The reason we decrement R to make the sum smaller is because every number to the left of arr[R] is smaller than arr[R]. By the same token, every number to the right of arr[L] is greater than arr[L].
+def targetSum(nums, target):
+    L, R = 0, len(nums) - 1
+    while L < R:
+        if nums[L] + nums[R] > target:
+            R -= 1
+        elif nums[L] + nums[R] < target:
+            L += 1
+        else:
+            return [L, R]
+img
+
+Time Complexity
+The strength of this pattern is that it allows us to have at most 
+�
+n iterations, which saves us a ton of redundant work that we would have done with the brute force approach.
